@@ -7,10 +7,30 @@ const logger = require('./utils/logger')
 
 const app = express()
 
+// Enable CORS for external access
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
+    next();
+});
+
 app.use(express.json())
 
 app.get('/', (req, res) => {
-    res.json({ status: true, message: "Library Management API is running successfully!" })
+    res.json({
+        status: true,
+        message: "Library Management API is running successfully!",
+        endpoints: [
+            "/category/allCategory",
+            "/books/addBook",
+            "/users/signup",
+            "/users/login"
+        ]
+    })
 })
 
 app.use('/', mainRouter)
