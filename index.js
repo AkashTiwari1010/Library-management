@@ -12,7 +12,12 @@ app.use('/', mainRouter)
 
 const PORT = process.env.PORT || 9000
 
-app.listen(PORT, () => {
-    console.log(`Server is running on ${PORT}`)
-    logger.log('info', `Server is running on ${PORT}`)
-})
+if (!process.env.VERCEL) {
+    app.listen(PORT, () => {
+        console.log(`Server is running on ${PORT}`)
+        logger.log('info', `Server is running on ${PORT}`)
+    })
+}
+
+module.exports = app
+
