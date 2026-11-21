@@ -8,6 +8,11 @@ const logger = require('./utils/logger')
 const app = express()
 
 app.use(express.json())
+
+app.get('/', (req, res) => {
+    res.json({ status: true, message: "Library Management API is running successfully!" })
+})
+
 app.use('/', mainRouter)
 
 const PORT = process.env.PORT || 9000
