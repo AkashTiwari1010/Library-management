@@ -1,5 +1,6 @@
 require('dotenv').config()
 const express = require('express')
+const path = require('path')
 
 require('./config/modelConfig')
 const mainRouter = require('./urls')
@@ -19,18 +20,22 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json())
+app.use(express.static(path.join(__dirname, 'public')))
 
 app.get('/', (req, res) => {
-    res.json({
-        status: true,
-        message: "Library Management API is running successfully!",
-        endpoints: [
-            "/category/allCategory",
-            "/books/addBook",
-            "/users/signup",
-            "/users/login"
-        ]
-    })
+    if (req.headers.accept && req.headers.accept.includes('application/json') && !req.headers.accept.includes('text/html')) {
+        return res.json({
+            status: true,
+            message: "Library Management API is running successfully!",
+            endpoints: [
+                "/category/allCategory",
+                "/books/allBooks",
+                "/users/signupUser",
+                "/users/userLogin"
+            ]
+        });
+    }
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 })
 
 app.use('/', mainRouter)

@@ -391,6 +391,25 @@ const likeDislikeBook = async (req, res) => {
     }
 }
 
+const allBooks = async (req, res) => {
+    try {
+        const books = await bookModel.find({ isActive: true });
+        res.status(200).json({
+            success: true,
+            message: "All books retrieved successfully",
+            count: books.length,
+            bookData: books,
+        });
+    } catch (error) {
+        bookLogger.log('error', `Error retrieving books: ${error.message}`);
+        res.status(500).json({
+            success: false,
+            message: "Error retrieving books",
+            error: error.message,
+        });
+    }
+};
+
 // Exporting the API
 module.exports = {
     addBook,
@@ -402,4 +421,5 @@ module.exports = {
     borrowBooks,
     returnBook,
     likeDislikeBook,
+    allBooks,
 }
